@@ -1,0 +1,30 @@
+name: Deploy React Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Docker Image
+        run: docker build -t abhiraj405/sms-client --build-arg REACT_APP_BASE_URL='${{ secrets.REACT_APP_BASE_URL }}' .
+      - name: Publish Image to dockerhub
+        run: docker push abhiraj405/sms-client:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull Image from Docker Hub
+        run: docker pull abhiraj405/sms-client:latest
+      - name: Stop and Remove Old Container
+        run: docker rm -f mern-sms-client-container
+      - name: Run Docker Container
+        run: docker run -d -p 3000:80 --name mern-sms-client-container abhiraj405/sms-client:latest
