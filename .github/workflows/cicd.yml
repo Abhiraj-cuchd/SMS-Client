@@ -24,7 +24,5 @@ jobs:
     steps:
       - name: Pull Image from Docker Hub
         run: docker pull abhiraj405/sms-client:latest
-      - name: Stop and Remove Old Container
-        run: docker rm -f mern-sms-client-container
       - name: Run Docker Container
         run: docker run -d -p 3000:80 --name mern-sms-client-container abhiraj405/sms-client:latest
