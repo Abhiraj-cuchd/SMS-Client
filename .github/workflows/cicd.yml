@@ -12,7 +12,7 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v4
       - name: Login to Docker Hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_SECRET }}
       - name: Build Docker Image
         run: docker build -t abhiraj405/sms-client --build-arg REACT_APP_BASE_URL='${{ secrets.REACT_APP_BASE_URL }}' .
       - name: Publish Image to dockerhub
